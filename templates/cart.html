@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart - Coco Shop</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f7f7f7; }
+        .cart-container { max-width: 900px; margin: 40px auto; }
+        .product-img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; }
+        .badge-count { background:#FF6B9D; color:white; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg,#FF6B9D 0%,#FFA502 100%)">
+        <div class="container">
+            <a class="navbar-brand" href="/">Coco Shop</a>
+            <div class="ms-auto">
+                <a class="btn btn-light" href="/">Continue Shopping</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="cart-container">
+        <h3>Your Cart <small class="text-muted">({{ cart_count }})</small></h3>
+        <div class="card mt-3">
+            <div class="card-body">
+                {% if items %}
+                <form method="post" action="/cart/update">
+                    <table class="table align-middle">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for it in items %}
+                            <tr>
+                                <td><img src="{{ it.product.image_url }}" class="product-img" onerror="this.src='https://via.placeholder.com/80'"/></td>
+                                <td>{{ it.product.name }}</td>
+                                <td>${{ "%.2f"|format(it.product.price) }}</td>
+                                <td>
+                                    <form method="post" action="/cart/update" style="display:flex;gap:8px;align-items:center">
+                                        <input type="hidden" name="product_id" value="{{ it.product.id }}">
+                                        <input type="number" name="quantity" value="{{ it.quantity }}" min="0" class="form-control" style="width:100px">
+                                        <button class="btn btn-primary" type="submit">Update</button>
+                                    </form>
+                                </td>
+                                <td>${{ "%.2f"|format(it.item_total) }}</td>
+                                <td>
+                                    <form method="post" action="/cart/update" onsubmit="return confirm('Remove this item?');">
+                                        <input type="hidden" name="product_id" value="{{ it.product.id }}">
+                                        <input type="hidden" name="quantity" value="0">
+                                        <button class="btn btn-danger">Remove</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </form>
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <form method="post" action="/cart/clear" onsubmit="return confirm('Clear cart?');">
+                            <button class="btn btn-outline-danger">Clear Cart</button>
+                        </form>
+                    </div>
+                    <div>
+                        <h4>Total: ${{ "%.2f"|format(total) }}</h4>
+                        <button class="btn btn-success">Proceed to Checkout</button>
+                    </div>
+                </div>
+                {% else %}
+                    <p>Your cart is empty. <a href="/">Shop now</a></p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
