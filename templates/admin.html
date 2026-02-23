@@ -11,10 +11,10 @@
     
     <style>
         :root {
-            --primary-color: #FF6B9D;
-            --secondary-color: #FFA502;
+            --primary-color: #C41E3A;
+            --secondary-color: #8B0000;
             --dark-color: #2C2C2C;
-            --light-color: #F5F5F5;
+            --light-color: #FFFFFF;
         }
 
         * {
@@ -366,6 +366,25 @@
                             </div>
 
                             <div class="mb-3">
+                                <label for="category_id" class="form-label">
+                                    <i class="fas fa-sitemap"></i> Category
+                                </label>
+                                <select 
+                                    class="form-control" 
+                                    id="category_id" 
+                                    name="category_id"
+                                    required
+                                >
+                                    <option value="">Select a category</option>
+                                    {% if categories %}
+                                        {% for category in categories %}
+                                        <option value="{{ category.id }}">{{ category.name }}</option>
+                                        {% endfor %}
+                                    {% endif %}
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
                                 <label for="image_url" class="form-label">
                                     <i class="fas fa-image"></i> Image URL
                                 </label>
@@ -421,6 +440,7 @@
                                         <tr>
                                             <th>Image</th>
                                             <th>Name</th>
+                                            <th>Category</th>
                                             <th>Price</th>
                                             <th>Description</th>
                                             <th>Action</th>
@@ -439,6 +459,15 @@
                                             </td>
                                             <td>
                                                 <strong>{{ product.name }}</strong>
+                                            </td>
+                                            <td>
+                                                <small class="badge bg-info">
+                                                    {% if product.category %}
+                                                        {{ product.category.name }}
+                                                    {% else %}
+                                                        Others
+                                                    {% endif %}
+                                                </small>
                                             </td>
                                             <td>
                                                 <span class="badge bg-success">${{ "%.2f"|format(product.price) }}</span>

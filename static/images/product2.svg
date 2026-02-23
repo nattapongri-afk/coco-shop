@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 550">
+  <defs>
+    <linearGradient id="denimGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a4080;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#0d2654;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#051a3d;stop-opacity:1" />
+    </linearGradient>
+    <pattern id="denimWeave" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="10" y2="10" stroke="#333" stroke-width="0.5" opacity="0.3"/>
+      <line x1="10" y1="0" x2="0" y2="10" stroke="#333" stroke-width="0.5" opacity="0.3"/>
+    </pattern>
+  </defs>
+  
+  <!-- Left pant leg -->
+  <path d="M 100 100 L 140 90 Q 150 150 145 300 L 140 520 L 100 520 L 110 300 Q 105 150 95 100 Z" fill="url(#denimGrad)" stroke="#000" stroke-width="1.5"/>
+  
+  <!-- Right pant leg -->
+  <path d="M 260 100 L 300 90 Q 310 150 305 300 L 300 520 L 260 520 L 270 300 Q 265 150 255 100 Z" fill="url(#denimGrad)" stroke="#000" stroke-width="1.5"/>
+  
+  <!-- Denim texture overlay -->
+  <rect x="95" y="90" width="210" height="440" fill="url(#denimWeave)" opacity="0.6"/>
+  
+  <!-- Waistband -->
+  <ellipse cx="200" cy="90" rx="90" ry="18" fill="#2c2c2c" stroke="#000" stroke-width="1.5"/>
+  <ellipse cx="200" cy="88" rx="88" ry="16" fill="#3a3a3a"/>
+  
+  <!-- Belt loop details -->
+  <rect x="120" y="85" width="8" height="25" fill="#2c2c2c" stroke="#000" stroke-width="0.5"/>
+  <rect x="272" y="85" width="8" height="25" fill="#2c2c2c" stroke="#000" stroke-width="0.5"/>
+  
+  <!-- Center seam -->
+  <line x1="200" y1="100" x2="200" y2="520" stroke="#444" stroke-width="1" opacity="0.6"/>
+  
+  <!-- Zipper -->
+  <line x1="200" y1="92" x2="200" y2="160" stroke="#b8b8b8" stroke-width="3"/>
+  <circle cx="200" cy="92" r="5" fill="#d4af37" stroke="#999" stroke-width="1"/>
+  
+  <!-- Zipper teeth -->
+  <g stroke="#999" stroke-width="1.5">
+    <circle cx="195" cy="110" r="1.5" fill="#999"/>
+    <circle cx="205" cy="110" r="1.5" fill="#999"/>
+    <circle cx="195" cy="130" r="1.5" fill="#999"/>
+    <circle cx="205" cy="130" r="1.5" fill="#999"/>
+    <circle cx="195" cy="150" r="1.5" fill="#999"/>
+    <circle cx="205" cy="150" r="1.5" fill="#999"/>
+  </g>
+  
+  <!-- Front pockets -->
+  <path d="M 140 180 Q 135 220 140 260" stroke="#444" stroke-width="2" fill="none" opacity="0.7"/>
+  <path d="M 260 180 Q 265 220 260 260" stroke="#444" stroke-width="2" fill="none" opacity="0.7"/>
+  
+  <!-- Pocket stitching -->
+  <path d="M 137 185 L 133 195" stroke="#666" stroke-width="1" fill="none" opacity="0.5"/>
+  <path d="M 263 185 L 267 195" stroke="#666" stroke-width="1" fill="none" opacity="0.5"/>
+  
+  <!-- Crotch area shading -->
+  <ellipse cx="200" cy="280" rx="50" ry="40" fill="#000" opacity="0.1"/>
+  
+  <!-- Leg seams/wrinkles -->
+  <path d="M 110 250 Q 115 300 125 400" stroke="#333" stroke-width="1" fill="none" opacity="0.4"/>
+  <path d="M 290 250 Q 285 300 275 400" stroke="#333" stroke-width="1" fill="none" opacity="0.4"/>
+  
+  <!-- Hem detail -->
+  <ellipse cx="120" cy="520" rx="8" ry="3" fill="#000" opacity="0.2"/>
+  <ellipse cx="280" cy="520" rx="8" ry="3" fill="#000" opacity="0.2"/>
+</svg>

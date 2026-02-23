@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 550">
+  <defs>
+    <linearGradient id="jacketGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3d7a4d;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#2e5f3d;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a3a2e;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="jacketShade" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#000;stop-opacity:0.2" />
+      <stop offset="50%" style="stop-color:#000;stop-opacity:0" />
+      <stop offset="100%" style="stop-color:#000;stop-opacity:0.2" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Left sleeve -->
+  <path d="M 70 140 L 50 200 L 45 400 L 110 390 L 120 140 Z" fill="url(#jacketGrad)" stroke="#000" stroke-width="1.5"/>
+  
+  <!-- Right sleeve -->
+  <path d="M 330 140 L 350 200 L 355 400 L 290 390 L 280 140 Z" fill="url(#jacketGrad)" stroke="#000" stroke-width="1.5"/>
+  
+  <!-- Main jacket body -->
+  <path d="M 110 140 L 120 100 L 280 100 L 290 140 L 300 380 L 100 380 Z" fill="url(#jacketGrad)" stroke="#000" stroke-width="2"/>
+  
+  <!-- Left front panel shading -->
+  <path d="M 110 140 L 200 140 L 200 380 L 100 380 Z" fill="url(#jacketShade)"/>
+  
+  <!-- Collar left -->
+  <path d="M 120 100 Q 140 75 160 100 L 145 150 Z" fill="#4a8a5e" stroke="#000" stroke-width="1.5"/>
+  
+  <!-- Collar right -->
+  <path d="M 280 100 Q 260 75 240 100 L 255 150 Z" fill="#4a8a5e" stroke="#000" stroke-width="1.5"/>
+  
+  <!-- Center zipper line -->
+  <line x1="200" y1="102" x2="200" y2="370" stroke="#666" stroke-width="2"/>
+  
+  <!-- Zipper pull area -->
+  <rect x="195" y="105" width="10" height="20" rx="2" fill="#d4af37" stroke="#999" stroke-width="1"/>
+  
+  <!-- Zipper teeth details -->
+  <g stroke="#555" stroke-width="1.5" opacity="0.8">
+    <circle cx="195" cy="130" r="1.5" fill="#666"/>
+    <circle cx="205" cy="130" r="1.5" fill="#666"/>
+    <circle cx="195" cy="160" r="1.5" fill="#666"/>
+    <circle cx="205" cy="160" r="1.5" fill="#666"/>
+    <circle cx="195" cy="190" r="1.5" fill="#666"/>
+    <circle cx="205" cy="190" r="1.5" fill="#666"/>
+    <circle cx="195" cy="220" r="1.5" fill="#666"/>
+    <circle cx="205" cy="220" r="1.5" fill="#666"/>
+    <circle cx="195" cy="250" r="1.5" fill="#666"/>
+    <circle cx="205" cy="250" r="1.5" fill="#666"/>
+    <circle cx="195" cy="280" r="1.5" fill="#666"/>
+    <circle cx="205" cy="280" r="1.5" fill="#666"/>
+  </g>
+  
+  <!-- Left front pocket -->
+  <rect x="130" y="220" width="40" height="55" rx="3" fill="#0d1b18" stroke="#555" stroke-width="1.5"/>
+  <line x1="150" y1="215" x2="150" y2="280" stroke="#555" stroke-width="1" opacity="0.6"/>
+  
+  <!-- Right front pocket -->
+  <rect x="230" y="220" width="40" height="55" rx="3" fill="#0d1b18" stroke="#555" stroke-width="1.5"/>
+  <line x1="250" y1="215" x2="250" y2="280" stroke="#555" stroke-width="1" opacity="0.6"/>
+  
+  <!-- Flap/sleeve edge detail -->
+  <path d="M 110 145 Q 115 180 110 220" stroke="#444" stroke-width="1" fill="none" opacity="0.5"/>
+  <path d="M 290 145 Q 285 180 290 220" stroke="#444" stroke-width="1" fill="none" opacity="0.5"/>
+  
+  <!-- Fabric wrinkles/texture -->
+  <path d="M 140 250 Q 150 280 140 320" stroke="#444" stroke-width="1" fill="none" opacity="0.4"/>
+  <path d="M 260 250 Q 250 280 260 320" stroke="#444" stroke-width="1" fill="none" opacity="0.4"/>
+  
+  <!-- Hem detail (bottom) -->
+  <ellipse cx="200" cy="380" rx="100" ry="8" fill="#000" opacity="0.2"/>
+  
+  <!-- Fabric fold shadows -->
+  <path d="M 120 200 Q 130 250 120 300" stroke="#000" stroke-width="1.5" fill="none" opacity="0.2"/>
+</svg>

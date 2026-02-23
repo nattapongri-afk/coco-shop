@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 450">
+  <defs>
+    <radialGradient id="shoeShine" cx="35%" cy="35%">
+      <stop offset="0%" style="stop-color:#fff;stop-opacity:0.4" />
+      <stop offset="100%" style="stop-color:#fff;stop-opacity:0" />
+    </radialGradient>
+    <linearGradient id="shoeGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2a2a2a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0a0a0a;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="shoeGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a3e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0a0a1a;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Left Shoe -->
+  <g>
+    <!-- Sole -->
+    <ellipse cx="130" cy="320" rx="50" ry="18" fill="#1a1a1a" stroke="#000" stroke-width="2"/>
+    <ellipse cx="130" cy="318" rx="48" ry="16" fill="#2a2a2a"/>
+    
+    <!-- Main body -->
+    <path d="M 90 310 Q 85 220 110 150 Q 125 130 145 140 L 165 310" fill="url(#shoeGrad1)" stroke="#000" stroke-width="2"/>
+    
+    <!-- Toe box -->
+    <path d="M 145 140 Q 175 135 180 180 Q 175 310 165 310 L 145 310 Q 140 220 145 140" fill="url(#shoeGrad1)" stroke="#000" stroke-width="2"/>
+    
+    <!-- Accent stripe -->
+    <path d="M 100 220 Q 110 170 135 145" stroke="#FF1493" stroke-width="8" fill="none" stroke-linecap="round"/>
+    
+    <!-- Shine effect -->
+    <ellipse cx="125" cy="200" rx="20" ry="35" fill="url(#shoeShine)"/>
+    
+    <!-- Laces -->
+    <line x1="115" y1="160" x2="115" y2="280" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    <line x1="135" y1="155" x2="135" y2="280" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    <line x1="155" y1="160" x2="155" y2="280" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    
+    <!-- Lace criss-cross -->
+    <line x1="115" y1="200" x2="155" y2="200" stroke="#fff" stroke-width="2" opacity="0.8"/>
+    <line x1="155" y1="240" x2="115" y2="240" stroke="#fff" stroke-width="2" opacity="0.8"/>
+  </g>
+  
+  <!-- Right Shoe -->
+  <g>
+    <!-- Sole -->
+    <ellipse cx="280" cy="320" rx="50" ry="18" fill="#1a1a1a" stroke="#000" stroke-width="2"/>
+    <ellipse cx="280" cy="318" rx="48" ry="16" fill="#2a2a2a"/>
+    
+    <!-- Main body -->
+    <path d="M 240 310 Q 235 220 260 150 Q 275 130 295 140 L 315 310" fill="url(#shoeGrad2)" stroke="#000" stroke-width="2"/>
+    
+    <!-- Toe box -->
+    <path d="M 295 140 Q 325 135 330 180 Q 325 310 315 310 L 295 310 Q 290 220 295 140" fill="url(#shoeGrad2)" stroke="#000" stroke-width="2"/>
+    
+    <!-- Accent stripe -->
+    <path d="M 250 220 Q 260 170 285 145" stroke="#FFA502" stroke-width="8" fill="none" stroke-linecap="round"/>
+    
+    <!-- Shine effect -->
+    <ellipse cx="275" cy="200" rx="20" ry="35" fill="url(#shoeShine)"/>
+    
+    <!-- Laces -->
+    <line x1="265" y1="160" x2="265" y2="280" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    <line x1="285" y1="155" x2="285" y2="280" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    <line x1="305" y1="160" x2="305" y2="280" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    
+    <!-- Lace criss-cross -->
+    <line x1="265" y1="200" x2="305" y2="200" stroke="#fff" stroke-width="2" opacity="0.8"/>
+    <line x1="305" y1="240" x2="265" y2="240" stroke="#fff" stroke-width="2" opacity="0.8"/>
+  </g>
+  
+  <!-- Shadow -->
+  <ellipse cx="200" cy="340" rx="140" ry="25" fill="#000" opacity="0.15"/>
+  
+  <!-- Ground line -->
+  <line x1="50" y1="340" x2="350" y2="340" stroke="#ddd" stroke-width="1" opacity="0.5"/>
+</svg>

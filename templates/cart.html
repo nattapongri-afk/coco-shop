@@ -3,83 +3,340 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cart - Coco Shop</title>
+    <title>Shopping Cart - Coco Shop</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f7f7f7; }
-        .cart-container { max-width: 900px; margin: 40px auto; }
-        .product-img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; }
-        .badge-count { background:#FF6B9D; color:white; }
+        :root {
+            --primary-color: #C41E3A;
+            --secondary-color: #8B0000;
+            --dark-color: #2C2C2C;
+            --light-color: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white !important;
+        }
+
+        .cart-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 15px;
+        }
+
+        .cart-header {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--dark-color);
+            margin-bottom: 30px;
+        }
+
+        .cart-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .cart-body {
+            padding: 30px;
+        }
+
+        .product-img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .product-row {
+            display: flex;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+            gap: 20px;
+        }
+
+        .product-row:last-child {
+            border-bottom: none;
+        }
+
+        .product-info {
+            flex: 1;
+        }
+
+        .product-name {
+            font-weight: 600;
+            color: var(--dark-color);
+            font-size: 1.1rem;
+        }
+
+        .product-price {
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-input {
+            width: 80px;
+        }
+
+        .btn-remove {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-remove:hover {
+            background-color: #c82333;
+            transform: scale(1.05);
+        }
+
+        .cart-summary {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .summary-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .summary-label {
+            color: #666;
+        }
+
+        .summary-value {
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .total-line {
+            border-top: 2px solid var(--primary-color);
+            padding-top: 15px;
+            margin-top: 15px;
+        }
+
+        .total-amount {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .btn-continue {
+            background-color: white;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-continue:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-checkout {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            border: none;
+            padding: 12px 40px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .btn-checkout:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(196, 30, 58, 0.3);
+            color: white;
+        }
+
+        .btn-clear {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-clear:hover {
+            background-color: #5a6268;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-cart-icon {
+            font-size: 5rem;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+
+        .empty-cart-text {
+            font-size: 1.3rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg,#FF6B9D 0%,#FFA502 100%)">
-        <div class="container">
-            <a class="navbar-brand" href="/">Coco Shop</a>
-            <div class="ms-auto">
-                <a class="btn btn-light" href="/">Continue Shopping</a>
-            </div>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-shopping-bag"></i>
+                Coco Shop
+            </a>
+            <span class="navbar-text text-white ms-auto">
+                <i class="fas fa-shopping-cart"></i> Cart Items: <span id="cart-count">{{ cart_count }}</span>
+            </span>
         </div>
     </nav>
 
     <div class="cart-container">
-        <h3>Your Cart <small class="text-muted">({{ cart_count }})</small></h3>
-        <div class="card mt-3">
-            <div class="card-body">
-                {% if items %}
-                <form method="post" action="/cart/update">
-                    <table class="table align-middle">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>Product</th>
-                                <th>Price</th>
-                                <th>Quantity</th>
-                                <th>Total</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for it in items %}
-                            <tr>
-                                <td><img src="{{ it.product.image_url }}" class="product-img" onerror="this.src='https://via.placeholder.com/80'"/></td>
-                                <td>{{ it.product.name }}</td>
-                                <td>${{ "%.2f"|format(it.product.price) }}</td>
-                                <td>
-                                    <form method="post" action="/cart/update" style="display:flex;gap:8px;align-items:center">
-                                        <input type="hidden" name="product_id" value="{{ it.product.id }}">
-                                        <input type="number" name="quantity" value="{{ it.quantity }}" min="0" class="form-control" style="width:100px">
-                                        <button class="btn btn-primary" type="submit">Update</button>
-                                    </form>
-                                </td>
-                                <td>${{ "%.2f"|format(it.item_total) }}</td>
-                                <td>
-                                    <form method="post" action="/cart/update" onsubmit="return confirm('Remove this item?');">
-                                        <input type="hidden" name="product_id" value="{{ it.product.id }}">
-                                        <input type="hidden" name="quantity" value="0">
-                                        <button class="btn btn-danger">Remove</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </form>
+        <h1 class="cart-header">
+            <i class="fas fa-shopping-cart"></i> Your Shopping Cart
+        </h1>
 
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <form method="post" action="/cart/clear" onsubmit="return confirm('Clear cart?');">
-                            <button class="btn btn-outline-danger">Clear Cart</button>
+        <div class="cart-card">
+            <div class="cart-body">
+                {% if items %}
+                    <!-- Cart Items -->
+                    {% for it in items %}
+                    <div class="product-row">
+                        <img src="{{ it.product.image_url }}" class="product-img" alt="{{ it.product.name }}"
+                             onerror="this.src='https://via.placeholder.com/100'">
+                        
+                        <div class="product-info">
+                            <div class="product-name">{{ it.product.name }}</div>
+                            <div style="color: #666; font-size: 0.9rem; margin-top: 5px;">
+                                {% if it.product.category %}
+                                    <span class="badge bg-info">{{ it.product.category.name }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div style="min-width: 100px;">
+                            <div class="product-price">${{ "%.2f"|format(it.product.price) }}</div>
+                        </div>
+
+                        <div class="quantity-control">
+                            <form method="post" action="/cart/update" style="display: flex; gap: 8px; align-items: center;">
+                                <input type="hidden" name="product_id" value="{{ it.product.id }}">
+                                <select name="quantity" class="form-control quantity-input" onchange="this.form.submit();">
+                                    {% for i in range(1, 11) %}
+                                    <option value="{{ i }}" {% if it.quantity == i %}selected{% endif %}>{{ i }}</option>
+                                    {% endfor %}
+                                </select>
+                            </form>
+                        </div>
+
+                        <div style="min-width: 100px; text-align: right;">
+                            <span class="product-price">${{ "%.2f"|format(it.item_total) }}</span>
+                        </div>
+
+                        <form method="post" action="/cart/update" onsubmit="return confirm('Remove this item from cart?');">
+                            <input type="hidden" name="product_id" value="{{ it.product.id }}">
+                            <input type="hidden" name="quantity" value="0">
+                            <button type="submit" class="btn-remove">
+                                <i class="fas fa-trash"></i> Remove
+                            </button>
                         </form>
                     </div>
-                    <div>
-                        <h4>Total: ${{ "%.2f"|format(total) }}</h4>
-                        <button class="btn btn-success">Proceed to Checkout</button>
+                    {% endfor %}
+
+                    <!-- Cart Summary -->
+                    <div class="cart-summary">
+                        <div class="summary-item">
+                            <span class="summary-label">Subtotal:</span>
+                            <span class="summary-value">${{ "%.2f"|format(total) }}</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Shipping:</span>
+                            <span class="summary-value">FREE</span>
+                        </div>
+                        <div class="summary-item total-line">
+                            <span class="summary-label" style="font-size: 1.3rem;">Total:</span>
+                            <span class="total-amount">${{ "%.2f"|format(total) }}</span>
+                        </div>
                     </div>
-                </div>
+
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        <a href="/" class="btn-continue">
+                            <i class="fas fa-arrow-left"></i> Continue Shopping
+                        </a>
+                        <form method="post" action="/cart/clear" onsubmit="return confirm('Clear entire cart?');" style="display: inline;">
+                            <button type="submit" class="btn-clear">
+                                <i class="fas fa-trash"></i> Clear Cart
+                            </button>
+                        </form>
+                        <a href="/checkout" class="btn-checkout">
+                            <i class="fas fa-arrow-right"></i> Proceed to Checkout
+                        </a>
+                    </div>
+
                 {% else %}
-                    <p>Your cart is empty. <a href="/">Shop now</a></p>
+                    <!-- Empty Cart -->
+                    <div class="empty-cart">
+                        <div class="empty-cart-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div class="empty-cart-text">Your cart is empty</div>
+                        <a href="/" class="btn-checkout">
+                            <i class="fas fa-shopping-bag"></i> Start Shopping
+                        </a>
+                    </div>
                 {% endif %}
             </div>
         </div>

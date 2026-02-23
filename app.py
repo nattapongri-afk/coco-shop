@@ -15,6 +15,18 @@ app.secret_key = 'your-secret-key-12345'  # For session management
 db = SQLAlchemy(app)
 
 # ===== Database Models =====
+class Category(db.Model):
+    __tablename__ = 'categories'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False, unique=True)
+    icon = db.Column(db.String(30), default='fas fa-tag')
+    
+    products = db.relationship('Product', backref='category', lazy=True, cascade='all, delete-orphan')
+    
+    def __repr__(self):
+        return f'<Category {self.name}>'
+
 class Product(db.Model):
     __tablename__ = 'products'
     
@@ -23,6 +35,7 @@ class Product(db.Model):
     price = db.Column(db.Float, nullable=False)
     image_url = db.Column(db.String(500), nullable=True)
     description = db.Column(db.Text, nullable=True)
+    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=False, default=1)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
     
     def to_dict(self):
@@ -32,56 +45,84 @@ class Product(db.Model):
             'name': self.name,
             'price': self.price,
             'image_url': self.image_url,
-            'description': self.description
+            'description': self.description,
+            'category_id': self.category_id,
+            'category_name': self.category.name if self.category else 'Others'
         }
     
     def __repr__(self):
         return f'<Product {self.name}>'
+
+# ===== Sample Categories =====
+SAMPLE_CATEGORIES = [
+    {'name': 'T-Shirts', 'icon': 'fas fa-shirt'},
+    {'name': 'Hoodies', 'icon': 'fas fa-hoodie'},
+    {'name': 'Jeans Slim Fit', 'icon': 'fas fa-pants'},
+    {'name': 'Ski-Snow Masks', 'icon': 'fas fa-mask'},
+]
 
 # ===== Sample Data =====
 SAMPLE_PRODUCTS = [
     {
         'name': 'Summer T-Shirt',
         'price': 19.99,
-        'image_url': 'https://via.placeholder.com/400/FF6B9D/FFFFFF?text=T-Shirt',
-        'description': 'Comfortable and stylish summer wear perfect for casual outings.'
+        'image_url': '/static/images/product1.svg',
+        'description': 'Comfortable and stylish summer wear perfect for casual outings.',
+        'category': 'T-Shirts'
     },
     {
         'name': 'Classic Denim Jeans',
         'price': 49.99,
-        'image_url': 'https://via.placeholder.com/400/FFA502/FFFFFF?text=Jeans',
-        'description': 'Premium quality denim with a perfect fit for any occasion.'
+        'image_url': '/static/images/product2.svg',
+        'description': 'Premium quality denim with a perfect fit for any occasion.',
+        'category': 'Jeans Slim Fit'
     },
     {
         'name': 'Designer Sneakers',
         'price': 89.99,
-        'image_url': 'https://via.placeholder.com/400/FF6B9D/FFFFFF?text=Sneakers',
-        'description': 'Trendy and comfortable sneakers for everyday style.'
+        'image_url': '/static/images/product3.svg',
+        'description': 'Trendy and comfortable sneakers for everyday style.',
+        'category': 'T-Shirts'
     },
     {
         'name': 'Casual Jacket',
         'price': 59.99,
-        'image_url': 'https://via.placeholder.com/400/FFA502/FFFFFF?text=Jacket',
-        'description': 'Lightweight jacket perfect for layering in any season.'
+        'image_url': '/static/images/product4.svg',
+        'description': 'Lightweight jacket perfect for layering in any season.',
+        'category': 'Hoodies'
     }
 ]
 
 def seed_db():
-    """Insert sample products if database is empty"""
+    """Insert sample categories and products if database is empty"""
     with app.app_context():
+        # Check if categories exist
+        category_count = Category.query.count()
+        
+        if category_count == 0:
+            print("\n📂 Inserting categories...")
+            for cat_data in SAMPLE_CATEGORIES:
+                new_category = Category(name=cat_data['name'], icon=cat_data['icon'])
+                db.session.add(new_category)
+            db.session.commit()
+            print(f"✅ Added {len(SAMPLE_CATEGORIES)} categories!")
+        
         # Check if products table has any data
         product_count = Product.query.count()
         
         if product_count == 0:
             print("\n📦 Inserting sample products...")
             for product_data in SAMPLE_PRODUCTS:
-                new_product = Product(
-                    name=product_data['name'],
-                    price=product_data['price'],
-                    image_url=product_data['image_url'],
-                    description=product_data['description']
-                )
-                db.session.add(new_product)
+                category = Category.query.filter_by(name=product_data['category']).first()
+                if category:
+                    new_product = Product(
+                        name=product_data['name'],
+                        price=product_data['price'],
+                        image_url=product_data['image_url'],
+                        description=product_data['description'],
+                        category_id=category.id
+                    )
+                    db.session.add(new_product)
             
             db.session.commit()
             print(f"✅ Added {len(SAMPLE_PRODUCTS)} sample products!")
@@ -202,21 +243,64 @@ def checkout():
     cart_count = sum(cart.values()) if isinstance(cart, dict) else 0
     return render_template('checkout.html', items=items, total=total, cart_count=cart_count)
 
+@app.route('/checkout/address', methods=['POST'])
+def checkout_address():
+    """Save address and redirect to payment method selection"""
+    session['address'] = {
+        'name': request.form.get('name'),
+        'phone': request.form.get('phone'),
+        'address': request.form.get('address'),
+        'city': request.form.get('city'),
+        'postal': request.form.get('postal')
+    }
+    session.modified = True
+    return redirect(url_for('checkout_payment'))
+
+@app.route('/checkout/payment', methods=['GET'])
+def checkout_payment():
+    """Select payment method"""
+    cart = session.get('cart', {}) or {}
+    items = []
+    total = 0.0
+    for pid, qty in cart.items():
+        prod = Product.query.get(int(pid))
+        if prod:
+            item_total = prod.price * qty
+            total += item_total
+            items.append({'product': prod, 'quantity': qty, 'item_total': item_total})
+
+    if not items:
+        return redirect(url_for('cart'))
+
+    cart_count = sum(cart.values()) if isinstance(cart, dict) else 0
+    address = session.get('address', {})
+    return render_template('payment_method.html', items=items, total=total, cart_count=cart_count, address=address)
 
 @app.route('/checkout/process', methods=['POST'])
 def checkout_process():
-    # Simple mock processing: collect form data, then clear cart and show success
-    name = request.form.get('name')
-    email = request.form.get('email')
-    address = request.form.get('address')
-
-    # Here you'd integrate with payment gateway. We'll just clear the cart.
+    """Process payment"""
+    payment_method = request.form.get('payment_method', 'cod')
+    address = session.get('address', {})
+    cart = session.get('cart', {})
+    
+    total = 0.0
+    for pid, qty in cart.items():
+        prod = Product.query.get(int(pid))
+        if prod:
+            total += prod.price * qty
+    
     order_info = {
-        'name': name,
-        'email': email,
-        'address': address
+        'name': address.get('name'),
+        'phone': address.get('phone'),
+        'address': address.get('address'),
+        'city': address.get('city'),
+        'postal': address.get('postal'),
+        'payment_method': payment_method,
+        'total': total
     }
+    
     session.pop('cart', None)
+    session.pop('address', None)
     session.modified = True
 
     return render_template('checkout_success.html', order=order_info)
@@ -259,32 +343,37 @@ def logout():
 def dashboard():
     """Admin dashboard"""
     products = Product.query.all()
-    return render_template('admin.html', products=products)
+    categories = Category.query.all()
+    return render_template('admin.html', products=products, categories=categories)
 
 @app.route('/add-product', methods=['GET', 'POST'])
 @login_required
 def add_product():
     """Add new product"""
+    categories = Category.query.all()
+    
     if request.method == 'POST':
         name = request.form.get('name')
         price = request.form.get('price')
         image_url = request.form.get('image_url')
         description = request.form.get('description', '')
+        category_id = request.form.get('category_id', 1)
         
         try:
             new_product = Product(
                 name=name,
                 price=float(price),
                 image_url=image_url,
-                description=description
+                description=description,
+                category_id=int(category_id)
             )
             db.session.add(new_product)
             db.session.commit()
             return redirect(url_for('dashboard'))
         except Exception as e:
-            return render_template('admin.html', error=f'Error adding product: {str(e)}')
+            return render_template('admin.html', error=f'Error adding product: {str(e)}', categories=categories)
     
-    return render_template('admin.html')
+    return render_template('admin.html', categories=categories)
 
 @app.route('/delete-product/<int:product_id>', methods=['POST'])
 @login_required

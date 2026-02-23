@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Method - Coco Shop</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #C41E3A;
+            --secondary-color: #8B0000;
+            --dark-color: #2C2C2C;
+            --light-color: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white !important;
+        }
+
+        .payment-container {
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+
+        .payment-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--dark-color);
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid var(--primary-color);
+        }
+
+        .payment-method-group {
+            margin-bottom: 20px;
+        }
+
+        .payment-option {
+            display: none;
+        }
+
+        .payment-option.active {
+            display: block;
+        }
+
+        .payment-button {
+            background-color: white;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .payment-button:hover {
+            border-color: var(--primary-color);
+            background-color: #f8f9fa;
+        }
+
+        .payment-button input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            margin: 0;
+        }
+
+        .payment-button.selected {
+            border-color: var(--primary-color);
+            background-color: #fff3f5;
+            box-shadow: 0 5px 15px rgba(196, 30, 58, 0.2);
+        }
+
+        .payment-icon {
+            font-size: 2rem;
+            color: var(--primary-color);
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+        }
+
+        .payment-details {
+            flex: 1;
+        }
+
+        .payment-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 5px;
+        }
+
+        .payment-description {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .qr-section {
+            text-align: center;
+            padding: 30px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .qr-placeholder {
+            width: 200px;
+            height: 200px;
+            background-color: white;
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto;
+            font-size: 3rem;
+            color: #ddd;
+        }
+
+        .qr-text {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            line-height: 1.6;
+        }
+
+        .address-summary {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .address-item {
+            margin-bottom: 10px;
+        }
+
+        .address-label {
+            font-weight: 600;
+            color: var(--dark-color);
+            display: inline-block;
+            width: 100px;
+        }
+
+        .address-value {
+            color: #666;
+        }
+
+        .order-summary {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+
+        .summary-label {
+            color: #666;
+        }
+
+        .summary-value {
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .total-amount {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-align: right;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid var(--primary-color);
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            border: none;
+            padding: 12px 40px;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-size: 1.1rem;
+            margin-top: 20px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(196, 30, 58, 0.3);
+            color: white;
+        }
+
+        .btn-back {
+            background-color: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-back:hover {
+            background-color: #5a6268;
+            color: white;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-shopping-bag"></i>
+                Coco Shop
+            </a>
+            <span class="navbar-text text-white ms-auto">
+                <i class="fas fa-shopping-cart"></i> Cart: <span id="cart-count">{{ cart_count }}</span>
+            </span>
+        </div>
+    </nav>
+
+    <div class="container payment-container">
+        <a href="/checkout" class="btn-back">
+            <i class="fas fa-arrow-left"></i> Back to Address
+        </a>
+
+        <!-- Address Summary -->
+        <div class="payment-card">
+            <h3 class="section-title">
+                <i class="fas fa-check-circle"></i> Shipping Address Confirmation
+            </h3>
+            
+            <div class="address-summary">
+                <div class="address-item">
+                    <span class="address-label"><i class="fas fa-user"></i> Name:</span>
+                    <span class="address-value">{{ address.name }}</span>
+                </div>
+                <div class="address-item">
+                    <span class="address-label"><i class="fas fa-phone"></i> Phone:</span>
+                    <span class="address-value">{{ address.phone }}</span>
+                </div>
+                <div class="address-item">
+                    <span class="address-label"><i class="fas fa-map"></i> Address:</span>
+                    <span class="address-value">{{ address.address }}</span>
+                </div>
+                <div class="address-item">
+                    <span class="address-label"><i class="fas fa-city"></i> City:</span>
+                    <span class="address-value">{{ address.city }} {{ address.postal }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="payment-card">
+            <h3 class="section-title">
+                <i class="fas fa-receipt"></i> Order Summary
+            </h3>
+            
+            <div class="order-summary">
+                {% set subtotal = 0 %}
+                {% for item in items %}
+                    {% set subtotal = subtotal + item.item_total %}
+                {% endfor %}
+                
+                <div class="summary-item">
+                    <span class="summary-label">Subtotal:</span>
+                    <span class="summary-value">${{ "%.2f"|format(subtotal) }}</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Shipping:</span>
+                    <span class="summary-value">Free</span>
+                </div>
+                <div class="total-amount">
+                    Total: ${{ "%.2f"|format(total) }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Method Selection -->
+        <div class="payment-card">
+            <h3 class="section-title">
+                <i class="fas fa-credit-card"></i> Select Payment Method
+            </h3>
+
+            <form action="/checkout/process" method="POST" id="paymentForm">
+                <div class="payment-method-group">
+                    <!-- COD Option -->
+                    <label class="payment-button" onclick="selectPaymentMethod(this)">
+                        <input type="radio" name="payment_method" value="cod" class="payment-radio">
+                        <div class="payment-icon">
+                            <i class="fas fa-truck"></i>
+                        </div>
+                        <div class="payment-details">
+                            <div class="payment-title">Cash on Delivery (COD)</div>
+                            <div class="payment-description">Pay when your order arrives. No additional fees.</div>
+                        </div>
+                    </label>
+
+                    <!-- QR Code Option -->
+                    <label class="payment-button" onclick="selectPaymentMethod(this)">
+                        <input type="radio" name="payment_method" value="qrcode" class="payment-radio">
+                        <div class="payment-icon">
+                            <i class="fas fa-qrcode"></i>
+                        </div>
+                        <div class="payment-details">
+                            <div class="payment-title">QR Code Payment</div>
+                            <div class="payment-description">Scan QR code with any Thai mobile app for secure payment.</div>
+                        </div>
+                    </label>
+
+                    <!-- PromptPay Option -->
+                    <label class="payment-button" onclick="selectPaymentMethod(this)">
+                        <input type="radio" name="payment_method" value="promptpay" class="payment-radio">
+                        <div class="payment-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <div class="payment-details">
+                            <div class="payment-title">PromptPay</div>
+                            <div class="payment-description">Direct transfer using PromptPay ID or phone number.</div>
+                        </div>
+                    </label>
+                </div>
+
+                <!-- QR Payment Details Section -->
+                <div id="qrPaymentSection" class="payment-option">
+                    <div class="qr-section">
+                        <h5>QR Code Payment Details</h5>
+                        <p style="color: #666; margin-top: 15px;">
+                            Please scan the QR code below with any Thai mobile payment application:
+                        </p>
+                        <div class="qr-placeholder">
+                            <i class="fas fa-barcode"></i>
+                        </div>
+                        <p class="qr-text">
+                            <strong>Amount:</strong> ฿{{ "%.2f"|format(total * 33) }}<br>
+                            <strong>Recipient:</strong> Coco Shop<br>
+                            <strong>Reference:</strong> Auto-generated upon payment
+                        </p>
+                    </div>
+                </div>
+
+                <!-- PromptPay Details Section -->
+                <div id="promptpaySection" class="payment-option">
+                    <div class="qr-section">
+                        <h5>PromptPay Payment Details</h5>
+                        <p style="color: #666; margin-top: 15px; line-height: 1.8;">
+                            <strong>PromptPay ID:</strong> 0123456789<br>
+                            <strong>Amount to transfer:</strong> ฿{{ "%.2f"|format(total * 33) }}<br>
+                            <strong>Reference Code:</strong> (Will be provided after order confirmation)<br><br>
+                            <em>You can transfer from any bank app or mobile wallet that supports PromptPay.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- COD Details Section -->
+                <div id="codSection" class="payment-option active">
+                    <div class="qr-section">
+                        <h5>Cash on Delivery</h5>
+                        <p style="color: #666; margin-top: 15px; line-height: 1.8;">
+                            <i class="fas fa-info-circle"></i> 
+                            Pay the full amount (฿{{ "%.2f"|format(total * 33) }}) when the delivery person arrives at your address.<br><br>
+                            <strong>Order Confirmation:</strong> You will receive an order confirmation email with tracking details.
+                        </p>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit" id="submitBtn">
+                    <i class="fas fa-check"></i> Complete Order
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function selectPaymentMethod(element) {
+            // Remove selected class from all buttons
+            document.querySelectorAll('.payment-button').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked button
+            element.classList.add('selected');
+            
+            // Hide all payment sections
+            document.querySelectorAll('.payment-option').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show appropriate section based on payment method
+            const method = element.querySelector('input[type="radio"]').value;
+            if (method === 'qrcode') {
+                document.getElementById('qrPaymentSection').classList.add('active');
+            } else if (method === 'promptpay') {
+                document.getElementById('promptpaySection').classList.add('active');
+            } else {
+                document.getElementById('codSection').classList.add('active');
+            }
+        }
+
+        // Set COD as default
+        document.addEventListener('DOMContentLoaded', function() {
+            const codOption = document.querySelector('input[value="cod"]').closest('.payment-button');
+            codOption.click();
+        });
+
+        // Validate form before submission
+        document.getElementById('paymentForm').addEventListener('submit', function(e) {
+            if (!document.querySelector('input[name="payment_method"]:checked')) {
+                e.preventDefault();
+                alert('Please select a payment method');
+            }
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
